@@ -10,12 +10,12 @@ import O4_UI_Utils as UI
 import O4_File_Names as FNAMES
 
 overpass_servers = {
-    "DE": "http://overpass-api.de/api/interpreter",
-    "FR": "http://api.openstreetmap.fr/oapi/interpreter",
+    "DE": "https://overpass-api.de/api/interpreter",
     "KU": "https://overpass.kumi.systems/api/interpreter",
-    "RU": "http://overpass.osm.rambler.ru/cgi/interpreter",
+    "RU": "https://overpass.openstreetmap.ru/api/interpreter",
 }
-overpass_server_choice = "DE"
+# KU server does not rate limit as of 2024-07-08
+overpass_server_choice = "KU"
 max_osm_tentatives = 8
 
 ################################################################################
@@ -575,6 +575,12 @@ def get_overpass_data(query, bbox, server_code=None):
                 2 ** tentative,
                 "sec...",
             )
+            true_server_code = (
+                random.choice(list(overpass_servers.keys()))
+                if overpass_server_choice == "random"
+                else overpass_server_choice
+            )
+            UI.vprint(1, "        Trying different OSM server", true_server_code)
         if tentative >= max_osm_tentatives:
             return 0
         if UI.red_flag:

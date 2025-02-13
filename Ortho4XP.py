@@ -37,7 +37,6 @@ if __name__ == '__main__':
     IMG.initialize_combined_providers_dict()
     if len(sys.argv)==1: # switch to the graphical interface
         Ortho4XP = GUI.Ortho4XP_GUI()
-
         Ortho4XP.mainloop()	    
         print("Bon vol!")
     else: # sequel is only concerned with command line 
